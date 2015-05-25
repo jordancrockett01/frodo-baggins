@@ -23,7 +23,7 @@ public class Pomodoro {
 
     }
 
-    public int sessionLength = 10000;
+    public int sessionLength = 12000;
     public int shortBreakLength = 5000;
     public int longBreakLength = 7000;
 
