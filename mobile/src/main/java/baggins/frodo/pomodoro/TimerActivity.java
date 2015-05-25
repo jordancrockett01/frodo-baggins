@@ -3,8 +3,12 @@ package baggins.frodo.pomodoro;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -90,6 +94,9 @@ public class TimerActivity extends Activity {
                 public void onClick(DialogInterface dialog, int id) {
                     countDownTimer.start();
                     updateTextViews();
+                    Intent timerService = new Intent(getActivity(), AlarmService.class);
+                    timerService.setData(Uri.parse(""+pomodoro.getCurrentRoundLength()));
+                    getActivity().startService(timerService);
                 }
             });
         }
@@ -106,6 +113,9 @@ public class TimerActivity extends Activity {
         return builder;
     }
 
+    public Activity getActivity() {
+        return this;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         log.write("onCreate");
@@ -120,6 +130,12 @@ public class TimerActivity extends Activity {
         pomodoro = new Pomodoro(this);
 
         updateTextViews();
+
+        IntentFilter mStatusIntentFilter = new IntentFilter(
+                AlarmService.Constants.BROADCAST_ACTION);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new AlarmResponseReciever(this), mStatusIntentFilter);
 
         super.onCreate(savedInstanceState);
     }

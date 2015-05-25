@@ -1,6 +1,6 @@
 package baggins.frodo.pomodoro;
 
-import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -10,8 +10,8 @@ import android.util.Log;
 public class Logger {
 
     public String TAG = "";
-    public Logger(Activity activity) {
-        TAG = activity.getClass().getName();
+    public Logger(Context context) {
+        TAG = context.getClass().getName();
     }
 
     public void write(String d) {

@@ -23,7 +23,7 @@ public class Pomodoro {
 
     }
 
-    public int sessionLength = 12000;
+    public int sessionLength = 5000;
     public int shortBreakLength = 5000;
     public int longBreakLength = 7000;
 
@@ -86,6 +86,20 @@ public class Pomodoro {
     }
 
     public PomState getPrevPomState() {
+
         return prevPomState;
+    }
+
+    public int getCurrentRoundLength() {
+        switch (pomState) {
+            case WORK:
+                return sessionLength;
+            case SHORTBREAK:
+                return shortBreakLength;
+            case LONGBREAK:
+                return longBreakLength;
+            default:
+                return 0;
+        }
     }
 }
