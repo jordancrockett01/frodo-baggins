@@ -1,17 +1,19 @@
 package baggins.frodo.pomodoro;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AnalogClock;
 import android.widget.TextClock;
 
 
-public class MainActivity extends ActionBarActivity implements DialogInterface.OnClickListener{
+public class MainActivity extends ActionBarActivity {
+
+    Logger log = new Logger(this);
 
     AnalogClock analog = null;
     TextClock textClock = null;
@@ -25,7 +27,6 @@ public class MainActivity extends ActionBarActivity implements DialogInterface.O
             int seconds = (int) (millis / 1000);
             int minutes = seconds / 60;
             seconds = seconds % 60;
-            Log.d("Tag", ""+seconds);
 
             analog.postInvalidate();
             textClock.postInvalidate();
@@ -41,8 +42,6 @@ public class MainActivity extends ActionBarActivity implements DialogInterface.O
 
         analog = (AnalogClock) findViewById(R.id.clock);
         textClock = (TextClock) findViewById(R.id.textclock);
-
-
 
         timerRunnable.run();
     }
@@ -69,8 +68,8 @@ public class MainActivity extends ActionBarActivity implements DialogInterface.O
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-
+    public void onStartClicked(View view) {
+        Intent startIntent = new Intent(this, TimerActivity.class);
+        startActivity(startIntent);
     }
 }
