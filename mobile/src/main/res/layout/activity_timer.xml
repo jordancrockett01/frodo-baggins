@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
+
+
+    <TextView
+        android:id="@+id/clockview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="36dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Round: "
+        android:id="@+id/currentround"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textSize="24dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rounds Left: "
+        android:id="@+id/roundsleft"
+        android:layout_below="@+id/currentround"
+        android:textSize="24dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/startpombutton"
+        android:onClick="onStartPomClicked"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Pom?"
+        android:id="@+id/newpombutton"
+        android:onClick="onNewPomClicked"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Round"
+        android:id="@+id/gamestate"
+        android:layout_above="@+id/clockview"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>
