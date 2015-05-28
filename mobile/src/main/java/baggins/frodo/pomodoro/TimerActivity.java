@@ -3,8 +3,12 @@ package baggins.frodo.pomodoro;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,6 +26,8 @@ public class TimerActivity extends Activity {
 
     private CountDownTimer countDownTimer = null;
     private Pomodoro pomodoro = null;
+
+    private Intent alarmServiceIntent = null;
 
     public CountDownTimer newTimer(int length) {
         return new CountDownTimer(length, 1000) {
@@ -125,6 +131,16 @@ public class TimerActivity extends Activity {
 
             updateTextViews();
 
+
+            // The filter's action is BROADCAST_ACTION
+            IntentFilter mStatusIntentFilter = new IntentFilter(
+                    AlarmService.Constants.BROADCAST_ACTION);
+
+            AlarmResponseReceiver alarmResponseReceiver = new AlarmResponseReceiver();
+
+            LocalBroadcastManager.getInstance(this)
+                    .registerReceiver(alarmResponseReceiver, mStatusIntentFilter);
+
             super.onCreate(savedInstanceState);
         }
     }
@@ -149,6 +165,12 @@ public class TimerActivity extends Activity {
     public void onStartPomClicked(View view) {
         pomodoro.start();
         findViewById(R.id.startpombutton).setVisibility(View.GONE);
+    }
+
+    public void onAlarmButtonClicked(View view) {
+        alarmServiceIntent = new Intent(getActivity(), AlarmService.class);
+        alarmServiceIntent.setData(Uri.parse("Hello Alarm"));
+        startService(alarmServiceIntent);
     }
 
     @Override

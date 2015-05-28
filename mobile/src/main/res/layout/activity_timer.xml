@@ -58,5 +58,14 @@
         android:layout_above="@+id/clockview"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ping"
+        android:id="@+id/alarmbutton"
+        android:onClick="onAlarmButtonClicked"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/startpombutton" />
+
 
 </RelativeLayout>
