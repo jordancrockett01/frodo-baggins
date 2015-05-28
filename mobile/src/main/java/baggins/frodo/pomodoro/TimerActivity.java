@@ -3,12 +3,8 @@ package baggins.frodo.pomodoro;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -94,9 +90,6 @@ public class TimerActivity extends Activity {
                 public void onClick(DialogInterface dialog, int id) {
                     countDownTimer.start();
                     updateTextViews();
-                    Intent timerService = new Intent(getActivity(), AlarmService.class);
-                    timerService.setData(Uri.parse(""+pomodoro.getCurrentRoundLength()));
-                    getActivity().startService(timerService);
                 }
             });
         }
@@ -120,24 +113,20 @@ public class TimerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         log.write("onCreate");
 
-        setContentView(R.layout.activity_timer);
+        if (savedInstanceState == null ) {
+            setContentView(R.layout.activity_timer);
 
-        clock = (TextView) findViewById(R.id.clockview);
-        roundsLeftView = (TextView) findViewById(R.id.roundsleft);
-        currentRoundView = (TextView) findViewById(R.id.currentround);
-        gameStateView = (TextView) findViewById(R.id.gamestate);
+            clock = (TextView) findViewById(R.id.clockview);
+            roundsLeftView = (TextView) findViewById(R.id.roundsleft);
+            currentRoundView = (TextView) findViewById(R.id.currentround);
+            gameStateView = (TextView) findViewById(R.id.gamestate);
 
-        pomodoro = new Pomodoro(this);
+            pomodoro = new Pomodoro(this);
 
-        updateTextViews();
+            updateTextViews();
 
-        IntentFilter mStatusIntentFilter = new IntentFilter(
-                AlarmService.Constants.BROADCAST_ACTION);
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                new AlarmResponseReciever(this), mStatusIntentFilter);
-
-        super.onCreate(savedInstanceState);
+            super.onCreate(savedInstanceState);
+        }
     }
 
     private void updateTextViews() {
@@ -162,13 +151,12 @@ public class TimerActivity extends Activity {
         findViewById(R.id.startpombutton).setVisibility(View.GONE);
     }
 
-    private void pauseTimer() {
-        if (countDownTimer != null) countDownTimer.cancel();
-    }
-
     @Override
     protected void onStart() {
         log.write("onStart");
+        if (pomodoro != null ) {
+
+        }
         super.onStart();
     }
 
@@ -193,7 +181,6 @@ public class TimerActivity extends Activity {
     @Override
     protected void onPause() {
         log.write("onPause");
-        pauseTimer();
         super.onPause();
     }
 
@@ -225,6 +212,8 @@ public class TimerActivity extends Activity {
     @Override
     protected void onDestroy() {
         log.write("onDestroy");
+
+        countDownTimer.cancel();
         super.onDestroy();
     }
 
