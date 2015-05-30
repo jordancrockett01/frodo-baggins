@@ -1,8 +1,10 @@
-package baggins.frodo.pomodoro;
+package baggins.frodo.pomodoro.services;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+
+import baggins.frodo.pomodoro.logging.Logger;
 
 /**
  * Created by Zach Sogolow on 5/27/2015.

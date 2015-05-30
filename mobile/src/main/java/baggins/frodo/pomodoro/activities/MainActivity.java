@@ -1,4 +1,4 @@
-package baggins.frodo.pomodoro;
+package baggins.frodo.pomodoro.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AnalogClock;
 import android.widget.TextClock;
+
+import baggins.frodo.pomodoro.logging.Logger;
+import baggins.frodo.pomodoro.R;
 
 
 public class MainActivity extends ActionBarActivity {

@@ -1,4 +1,4 @@
-package baggins.frodo.pomodoro;
+package baggins.frodo.pomodoro.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,6 +11,12 @@ import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
+
+import baggins.frodo.pomodoro.services.AlarmResponseReceiver;
+import baggins.frodo.pomodoro.services.AlarmService;
+import baggins.frodo.pomodoro.logging.Logger;
+import baggins.frodo.pomodoro.R;
+import baggins.frodo.pomodoro.model.Pomodoro;
 
 /**
  * Created by Zach Sogolow on 5/24/2015.

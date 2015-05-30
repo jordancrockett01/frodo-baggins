@@ -1,4 +1,4 @@
-package baggins.frodo.pomodoro;
+package baggins.frodo.pomodoro.logging;
 
 import android.content.Context;
 import android.util.Log;

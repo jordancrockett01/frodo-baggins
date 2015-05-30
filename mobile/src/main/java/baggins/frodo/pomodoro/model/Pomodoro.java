@@ -1,11 +1,13 @@
-package baggins.frodo.pomodoro;
+package baggins.frodo.pomodoro.model;
+
+import baggins.frodo.pomodoro.activities.TimerActivity;
 
 /**
  * Created by Zach Sogolow on 5/24/2015.
  */
 public class Pomodoro {
 
-    enum PomState { NEW("New Pomodoro"),
+    public enum PomState { NEW("New Pomodoro"),
         WORK("Work"),
         SHORTBREAK("Short Break"),
         LONGBREAK("Long Break"),
