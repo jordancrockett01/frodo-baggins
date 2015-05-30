@@ -13,7 +13,10 @@ import android.widget.TextClock;
 import baggins.frodo.pomodoro.logging.Logger;
 import baggins.frodo.pomodoro.R;
 
-
+/**
+ * Created by Zach Sogolow on 5/24/2015.
+ * MainActivity is the entry point into the application
+ */
 public class MainActivity extends ActionBarActivity {
 
     @SuppressWarnings("unused")
@@ -22,6 +25,8 @@ public class MainActivity extends ActionBarActivity {
     AnalogClock analog = null;
     TextClock textClock = null;
 
+
+    // Handler and runnable for updating the two clock views
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
         @Override
