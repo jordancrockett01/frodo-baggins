@@ -20,6 +20,7 @@ import baggins.frodo.pomodoro.services.AlarmService;
 
 /**
  * Created by Zach Sogolow on 5/24/2015.
+ * TimerActivity started by clicking "Wanna pom?" from the MainActivity.
  */
 public class TimerActivity extends Activity {
 
@@ -32,8 +33,6 @@ public class TimerActivity extends Activity {
 
     private CountDownTimer countDownTimer = null;
     private Pomodoro pomodoro = null;
-
-    private Intent alarmServiceIntent = null;
 
     public CountDownTimer newTimer(int length) {
         return new CountDownTimer(length, 1000) {
@@ -71,7 +70,8 @@ public class TimerActivity extends Activity {
                 messageBuilder.append(pomodoro.currentRound);
                 messageBuilder.append(" over.\n");
                 messageBuilder.append("Ready for a ");
-                messageBuilder.append(longBreak + "break? ");
+                messageBuilder.append(longBreak);
+                messageBuilder.append("break? ");
                 break;
             case SHORTBREAK:
                 messageBuilder.append("Short break over.\nEnd of round ");
@@ -124,30 +124,28 @@ public class TimerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         log.write("onCreate");
 
-        if (savedInstanceState == null ) {
-            setContentView(R.layout.activity_timer);
+        setContentView(R.layout.activity_timer);
 
-            clock = (TextView) findViewById(R.id.clockview);
-            roundsLeftView = (TextView) findViewById(R.id.roundsleft);
-            currentRoundView = (TextView) findViewById(R.id.currentround);
-            gameStateView = (TextView) findViewById(R.id.gamestate);
+        clock = (TextView) findViewById(R.id.clockview);
+        roundsLeftView = (TextView) findViewById(R.id.roundsleft);
+        currentRoundView = (TextView) findViewById(R.id.currentround);
+        gameStateView = (TextView) findViewById(R.id.gamestate);
 
-            pomodoro = new Pomodoro(this);
+        pomodoro = new Pomodoro(this);
 
-            updateTextViews();
+        updateTextViews();
 
 
-            // The filter's action is BROADCAST_ACTION
-            IntentFilter mStatusIntentFilter = new IntentFilter(
-                    AlarmService.Constants.BROADCAST_ACTION);
+        // The filter's action is BROADCAST_ACTION
+        IntentFilter mStatusIntentFilter = new IntentFilter(
+                AlarmService.Constants.BROADCAST_ACTION);
 
-            AlarmResponseReceiver alarmResponseReceiver = new AlarmResponseReceiver();
+        AlarmResponseReceiver alarmResponseReceiver = new AlarmResponseReceiver();
 
-            LocalBroadcastManager.getInstance(this)
-                    .registerReceiver(alarmResponseReceiver, mStatusIntentFilter);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(alarmResponseReceiver, mStatusIntentFilter);
 
-            super.onCreate(savedInstanceState);
-        }
+        super.onCreate(savedInstanceState);
     }
 
     private void updateTextViews() {
@@ -174,10 +172,10 @@ public class TimerActivity extends Activity {
 
     /**
      * Its actually ping
-     * @param view
+     * @param view the ping button
      */
     public void onAlarmButtonClicked(View view) {
-        alarmServiceIntent = new Intent(this, AlarmService.class);
+        Intent alarmServiceIntent = new Intent(this, AlarmService.class);
         alarmServiceIntent.setData(Uri.parse("Passing app data to the AlarmService"));
         startService(alarmServiceIntent);
     }
@@ -185,9 +183,6 @@ public class TimerActivity extends Activity {
     @Override
     protected void onStart() {
         log.write("onStart");
-        if (pomodoro != null ) {
-
-        }
         super.onStart();
     }
 

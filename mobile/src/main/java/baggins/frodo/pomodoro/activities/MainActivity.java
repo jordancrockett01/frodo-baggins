@@ -16,6 +16,7 @@ import baggins.frodo.pomodoro.R;
 
 public class MainActivity extends ActionBarActivity {
 
+    @SuppressWarnings("unused")
     Logger log = new Logger(this);
 
     AnalogClock analog = null;
@@ -23,13 +24,8 @@ public class MainActivity extends ActionBarActivity {
 
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
-    long startTime = 0;
         @Override
         public void run() {
-            long millis = System.currentTimeMillis() - startTime;
-            int seconds = (int) (millis / 1000);
-            int minutes = seconds / 60;
-            seconds = seconds % 60;
 
             analog.postInvalidate();
             textClock.postInvalidate();
