@@ -26,7 +26,7 @@ public class AlarmService extends IntentService {
 
 
     public AlarmService() {
-        super("Boom");
+        super("Default Constructor");
     }
     public AlarmService(String name) {
         super(name);
@@ -39,7 +39,6 @@ public class AlarmService extends IntentService {
 
         // Do work here, based on the contents of dataString
         String handled = doWorkHere(dataString);
-
         /*
          * Creates a new Intent containing a Uri object
          * BROADCAST_ACTION is a custom Intent action
@@ -55,6 +54,6 @@ public class AlarmService extends IntentService {
 
     private String doWorkHere(String string) {
         log.write(string);
-        return "booyah";
+        return "Sending a handled repsonse to AlarmRepsonseReciever";
     }
 }

@@ -11,11 +11,10 @@ import baggins.frodo.pomodoro.logging.Logger;
  */
 public class AlarmResponseReceiver extends BroadcastReceiver {
 
-    // Prevents instantiation
     public AlarmResponseReceiver() {
     }
-    // Called when the BroadcastReceiver gets an Intent it's registered to receive
 
+    // Called when the BroadcastReceiver gets an Intent it's registered to receive
     @Override
     public void onReceive(Context context, Intent intent) {
         /*

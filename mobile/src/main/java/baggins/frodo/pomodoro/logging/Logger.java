@@ -11,7 +11,7 @@ public class Logger {
 
     public String TAG = "";
     public Logger(Context context) {
-        TAG = context.getClass().getName();
+        TAG = context.getClass().getCanonicalName().toString();
     }
 
     public void write(String d) {

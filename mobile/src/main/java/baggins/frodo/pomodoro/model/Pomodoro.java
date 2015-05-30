@@ -25,13 +25,13 @@ public class Pomodoro {
 
     }
 
-    public int sessionLength = 5000;
+    public int sessionLength = 10000;
     public int shortBreakLength = 5000;
-    public int longBreakLength = 7000;
+    public int longBreakLength = 20000;
 
     private PomState pomState = PomState.NEW;
     private PomState prevPomState = PomState.NEW;
-    public int numberRounds = 3;
+    public int numberRounds = 2;
     public int currentRound = 1;
     private TimerActivity timerActivity = null;
 
@@ -50,29 +50,27 @@ public class Pomodoro {
         updatePomState();
     }
 
+
+    // Only called on new game and timer.finish()
     public void updatePomState() {
         switch (pomState) {
-            case NEW:
+            case NEW:       // new pomodoro, start working
                 pomState = PomState.WORK;
                 break;
-            case WORK:
+            case WORK:      // done working, check the round
                 if (currentRound < numberRounds) {
                     pomState = PomState.SHORTBREAK;
                 } else {
-                    pomState = PomState.LONGBREAK;
+                    pomState = PomState.LONGBREAK; // last round of work, long break
                 }
                 prevPomState = PomState.WORK;
                 break;
-            case SHORTBREAK:
-                if (currentRound < numberRounds) {
-                    pomState = PomState.WORK;
-                } else {
-                    pomState = PomState.WORK;
-                }
+            case SHORTBREAK:    // short breaks over, start working, increment round
+                pomState = PomState.WORK;
                 prevPomState = PomState.SHORTBREAK;
                 currentRound++;
                 break;
-            case LONGBREAK:
+            case LONGBREAK:     // long break is over, end the pom
                 pomState = PomState.OVER;
                 prevPomState = PomState.LONGBREAK;
                 break;
@@ -80,7 +78,8 @@ public class Pomodoro {
                 break;
         }
 
-        timerActivity.updateTimer(pomState);
+        // update the timer
+        timerActivity.updateTimer();
     }
 
     public PomState getPomState() {
@@ -88,11 +87,10 @@ public class Pomodoro {
     }
 
     public PomState getPrevPomState() {
-
         return prevPomState;
     }
 
-    public int getCurrentRoundLength() {
+    public int getCurrentRoundLength() throws PomOverException{
         switch (pomState) {
             case WORK:
                 return sessionLength;
@@ -100,8 +98,16 @@ public class Pomodoro {
                 return shortBreakLength;
             case LONGBREAK:
                 return longBreakLength;
+            case OVER:
+                throw new PomOverException();
             default:
                 return 0;
+        }
+    }
+
+    public class PomOverException extends Exception {
+         public PomOverException() {
+            super("The current pom state is OVER");
         }
     }
 }

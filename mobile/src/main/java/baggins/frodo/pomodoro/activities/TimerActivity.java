@@ -12,11 +12,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
+import baggins.frodo.pomodoro.R;
+import baggins.frodo.pomodoro.logging.Logger;
+import baggins.frodo.pomodoro.model.Pomodoro;
 import baggins.frodo.pomodoro.services.AlarmResponseReceiver;
 import baggins.frodo.pomodoro.services.AlarmService;
-import baggins.frodo.pomodoro.logging.Logger;
-import baggins.frodo.pomodoro.R;
-import baggins.frodo.pomodoro.model.Pomodoro;
 
 /**
  * Created by Zach Sogolow on 5/24/2015.
@@ -49,14 +49,11 @@ public class TimerActivity extends Activity {
         };
     }
 
-    public void updateTimer(Pomodoro.PomState state) {
-        if (state == Pomodoro.PomState.SHORTBREAK) {
-            countDownTimer = newTimer(pomodoro.shortBreakLength);
-        } else if (state == Pomodoro.PomState.LONGBREAK) {
-            countDownTimer = newTimer(pomodoro.longBreakLength);
-        } else if (state == Pomodoro.PomState.WORK) {
-            countDownTimer = newTimer(pomodoro.sessionLength);
-        } else { // game over
+    public void updateTimer() {
+        try {
+            countDownTimer = newTimer(pomodoro.getCurrentRoundLength());
+        } catch (Pomodoro.PomOverException poe) {
+            poe.printStackTrace();
             countDownTimer.cancel();
         }
 
@@ -70,11 +67,16 @@ public class TimerActivity extends Activity {
             case WORK:
                 String longBreak = "";
                 if (pomodoro.currentRound == pomodoro.numberRounds) longBreak = "longer ";
-                messageBuilder.append("Work session " + (pomodoro.currentRound) + " over.\n" +
-                        "Ready for a " + longBreak + "break? ");
+                messageBuilder.append("Work session ");
+                messageBuilder.append(pomodoro.currentRound);
+                messageBuilder.append(" over.\n");
+                messageBuilder.append("Ready for a ");
+                messageBuilder.append(longBreak + "break? ");
                 break;
             case SHORTBREAK:
-                messageBuilder.append("Short break over.\nEnd of round " + (pomodoro.currentRound - 1) + ".");
+                messageBuilder.append("Short break over.\nEnd of round ");
+                messageBuilder.append(pomodoro.currentRound - 1);
+                messageBuilder.append(".");
                 break;
             case LONGBREAK:
                 messageBuilder.append("Ready for another round?");
@@ -118,9 +120,6 @@ public class TimerActivity extends Activity {
         return builder;
     }
 
-    public Activity getActivity() {
-        return this;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         log.write("onCreate");
@@ -173,9 +172,13 @@ public class TimerActivity extends Activity {
         findViewById(R.id.startpombutton).setVisibility(View.GONE);
     }
 
+    /**
+     * Its actually ping
+     * @param view
+     */
     public void onAlarmButtonClicked(View view) {
-        alarmServiceIntent = new Intent(getActivity(), AlarmService.class);
-        alarmServiceIntent.setData(Uri.parse("Hello Alarm"));
+        alarmServiceIntent = new Intent(this, AlarmService.class);
+        alarmServiceIntent.setData(Uri.parse("Passing app data to the AlarmService"));
         startService(alarmServiceIntent);
     }
 
@@ -233,6 +236,11 @@ public class TimerActivity extends Activity {
         dialog.show();
     }
 
+    /**
+     * Can't call super from an inner class. This is a public method
+     * on the activity so that it can reach the parent class of Activity.
+     * Not safe. Total hack.
+     */
     public void damnInnerClass() {
         super.onBackPressed();
     }
@@ -240,7 +248,6 @@ public class TimerActivity extends Activity {
     @Override
     protected void onDestroy() {
         log.write("onDestroy");
-
         countDownTimer.cancel();
         super.onDestroy();
     }
