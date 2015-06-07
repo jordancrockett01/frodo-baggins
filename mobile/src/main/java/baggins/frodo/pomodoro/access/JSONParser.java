@@ -78,6 +78,12 @@ public class JSONParser {
 
     }
 
+    /**
+     * Only used for usernames for proof of concept.
+     * @param url
+     * @param params
+     * @return
+     */
     public JSONObject postJSONtoUrl(String url, String[] params) {
         OutputStream os = null;
         JSONObject jObj = null;
@@ -99,7 +105,7 @@ public class JSONParser {
             os = conn.getOutputStream();
 
             List<AbstractMap.SimpleEntry<String, String>> postParams = new ArrayList<>();
-            postParams.add(new AbstractMap.SimpleEntry<String, String>("name", params[0]));
+            postParams.add(new AbstractMap.SimpleEntry<>("name", params[0]));
 
             BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(os, "UTF-8"));

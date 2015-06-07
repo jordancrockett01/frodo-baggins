@@ -1,5 +1,6 @@
 package baggins.frodo.pomodoro.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,9 +16,9 @@ import java.util.Map;
 
 import baggins.frodo.pomodoro.R;
 import baggins.frodo.pomodoro.common.enums.BundleKey;
-import baggins.frodo.pomodoro.common.exceptions.PomOverException;
 import baggins.frodo.pomodoro.common.enums.PomState;
 import baggins.frodo.pomodoro.common.enums.ServiceTag;
+import baggins.frodo.pomodoro.common.exceptions.PomOverException;
 import baggins.frodo.pomodoro.logging.Logger;
 import baggins.frodo.pomodoro.model.Pomodoro;
 import baggins.frodo.pomodoro.services.AlarmResponseReceiver;
@@ -28,7 +28,7 @@ import baggins.frodo.pomodoro.services.AlarmService;
  * Created by Zach Sogolow on 5/24/2015.
  * TimerActivity started by clicking "Wanna pom?" from the MainActivity.
  */
-public class TimerActivity extends ActionBarActivity {
+public class TimerActivity extends Activity {
 
     Logger log = new Logger(this);
 
