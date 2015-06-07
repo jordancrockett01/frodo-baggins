@@ -63,9 +63,18 @@
         android:layout_height="wrap_content"
         android:text="ping"
         android:id="@+id/alarmbutton"
-        android:onClick="onAlarmButtonClicked"
+        android:onClick="onPingClicked"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/startpombutton" />
+        android:layout_toEndOf="@+id/currentround" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:id="@+id/onStopClicked"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/alarmbutton"
+        android:onClick="onStopClicked" />
 
 
 </RelativeLayout>

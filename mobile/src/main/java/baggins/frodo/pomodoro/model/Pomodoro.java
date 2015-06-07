@@ -1,5 +1,7 @@
 package baggins.frodo.pomodoro.model;
 
+import android.os.Bundle;
+
 import baggins.frodo.pomodoro.activities.TimerActivity;
 
 /**
@@ -80,6 +82,10 @@ public class Pomodoro {
 
         // update the timer
         timerActivity.updateTimer();
+    }
+
+    public void restoreState(Bundle savedInstanceState) {
+
     }
 
     public PomState getPomState() {

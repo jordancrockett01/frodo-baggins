@@ -24,6 +24,25 @@ import baggins.frodo.pomodoro.services.AlarmService;
  */
 public class TimerActivity extends Activity {
 
+    public enum BundleKey {
+        NEW(""),
+        WORK(""),
+        SHORTBREAK(""),
+        LONGBREAK(""),
+        OVER("");
+
+        private String pomString;
+
+        BundleKey(String str) {
+            pomString = str;
+        }
+
+        public String getKey() {
+            return pomString;
+        }
+
+    }
+
     Logger log = new Logger(this);
 
     TextView clock = null;
@@ -103,6 +122,17 @@ public class TimerActivity extends Activity {
             builder.setPositiveButton("Go!", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     countDownTimer.start();
+                    Intent startAlarmService = new Intent(getBaseContext(), AlarmService.class);
+                    try {
+                        startAlarmService.putExtra(AlarmService.ServiceTag.TIME.toString(),
+                                                    pomodoro.getCurrentRoundLength());
+                        startAlarmService.setData(Uri.parse(AlarmService.ServiceTag.START.toString()));
+                    } catch (Pomodoro.PomOverException e) {
+                        e.printStackTrace();
+                        startAlarmService.putExtra(AlarmService.ServiceTag.TIME.toString(), 0);
+                        startAlarmService.setData(Uri.parse(AlarmService.ServiceTag.OVER.toString()));
+                    }
+                    startService(startAlarmService);
                     updateTextViews();
                 }
             });
@@ -132,7 +162,9 @@ public class TimerActivity extends Activity {
         gameStateView = (TextView) findViewById(R.id.gamestate);
 
         pomodoro = new Pomodoro(this);
-
+        if (savedInstanceState != null) {
+            pomodoro.restoreState(savedInstanceState);
+        }
         updateTextViews();
 
 
@@ -140,12 +172,22 @@ public class TimerActivity extends Activity {
         IntentFilter mStatusIntentFilter = new IntentFilter(
                 AlarmService.Constants.BROADCAST_ACTION);
 
-        AlarmResponseReceiver alarmResponseReceiver = new AlarmResponseReceiver();
+        AlarmResponseReceiver alarmResponseReceiver = new AlarmResponseReceiver(this);
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(alarmResponseReceiver, mStatusIntentFilter);
 
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+    }
+
+    public void onBroadcastReceived(String string) {
+        log.write(string);
     }
 
     private void updateTextViews() {
@@ -174,10 +216,18 @@ public class TimerActivity extends Activity {
      * Its actually ping
      * @param view the ping button
      */
-    public void onAlarmButtonClicked(View view) {
+    public void onPingClicked(View view) {
         Intent alarmServiceIntent = new Intent(this, AlarmService.class);
-        alarmServiceIntent.setData(Uri.parse("Passing app data to the AlarmService"));
+        alarmServiceIntent.putExtra(AlarmService.ServiceTag.TIME.toString(), 5000);
+        alarmServiceIntent.setData(Uri.parse(AlarmService.ServiceTag.START.toString()));
         startService(alarmServiceIntent);
+    }
+
+    public void onStopClicked(View view) {
+        Intent stopServiceIntent = new Intent(this, AlarmService.class);
+        stopServiceIntent.setData(Uri.parse(AlarmService.ServiceTag.STOP.toString()));
+        startService(stopServiceIntent);
+
     }
 
     @Override
@@ -213,22 +263,26 @@ public class TimerActivity extends Activity {
     @Override
     public void onBackPressed() {
         log.write("onBackPressed");
+        Pomodoro.PomState state = pomodoro.getPomState();
+        if (state != Pomodoro.PomState.OVER || state != Pomodoro.PomState.NEW) {
+            AlertDialog.Builder builder = buildDialog("Do  you want to end the session?", "Pomodoro");
+            builder.setPositiveButton("Yes, Leave.", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    damnInnerClass();
+                }
+            });
+            builder.setNegativeButton("No, Stay!", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
 
-        AlertDialog.Builder builder = buildDialog("Do  you want to end the session?", "Pomodoro");
-        builder.setPositiveButton("Yes, Leave.", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                damnInnerClass();
-            }
-        });
-        builder.setNegativeButton("No, Stay!", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            damnInnerClass();
+        }
     }
 
     /**
@@ -243,7 +297,10 @@ public class TimerActivity extends Activity {
     @Override
     protected void onDestroy() {
         log.write("onDestroy");
-        countDownTimer.cancel();
+        if (countDownTimer != null) countDownTimer.cancel();
+        Intent stopServiceIntent = new Intent(this, AlarmService.class);
+        stopServiceIntent.setData(Uri.parse(AlarmService.ServiceTag.STOP.toString()));
+        startService(stopServiceIntent);
         super.onDestroy();
     }
 

@@ -76,4 +76,9 @@ public class MainActivity extends ActionBarActivity {
         Intent startIntent = new Intent(this, TimerActivity.class);
         startActivity(startIntent);
     }
+
+    public void onWebApiClicked(View view) {
+        Intent startIntent = new Intent(this, ListUserActivity.class);
+        startActivity(startIntent);
+    }
 }
