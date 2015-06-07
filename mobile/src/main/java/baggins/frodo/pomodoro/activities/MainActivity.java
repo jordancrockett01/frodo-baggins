@@ -10,8 +10,11 @@ import android.view.View;
 import android.widget.AnalogClock;
 import android.widget.TextClock;
 
-import baggins.frodo.pomodoro.logging.Logger;
 import baggins.frodo.pomodoro.R;
+import baggins.frodo.pomodoro.access.DBAccess;
+import baggins.frodo.pomodoro.common.exceptions.CreateUserException;
+import baggins.frodo.pomodoro.logging.Logger;
+import baggins.frodo.pomodoro.model.User;
 
 /**
  * Created by Zach Sogolow on 5/24/2015.
@@ -78,7 +81,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onWebApiClicked(View view) {
-        Intent startIntent = new Intent(this, ListUserActivity.class);
-        startActivity(startIntent);
+        DBAccess dbAccess = new DBAccess(this);
+//        dbAccess.getAllUsers();
+
+        try {
+            dbAccess.createUser(new User("Zach", "Sogolow", "zachsogolow"));
+
+        } catch (CreateUserException e) {
+            e.printStackTrace();
+        }
     }
 }

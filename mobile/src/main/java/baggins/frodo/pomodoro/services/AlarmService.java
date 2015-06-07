@@ -10,41 +10,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
+import baggins.frodo.pomodoro.common.enums.ServiceTag;
 import baggins.frodo.pomodoro.logging.Logger;
 
 /**
  * Created by Zach Sogolow on 5/27/2015.
  */
 public class AlarmService extends Service {
-
-    public enum ServiceTag {
-        START("START"),
-        STOP("STOP"),
-        OVER("OVER"),
-        TIME("TIME"),
-        TIMERFINISHED("TIMERFINSISHED"),
-        CANCELLED("CANCELLED"),
-        UNKNOWN("UNKNOWN");
-
-        private String serviceTag;
-
-        ServiceTag(String str) {
-            serviceTag = str;
-        }
-
-        public String toString() {
-            return serviceTag;
-        }
-        public static ServiceTag parse(String str) {
-            for (ServiceTag tag : values()) {
-                if (tag.toString().equals(str)) {
-                    return tag;
-                }
-            }
-            return UNKNOWN;
-        }
-
-    }
 
     Logger log = new Logger(this);
 

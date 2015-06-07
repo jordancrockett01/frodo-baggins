@@ -1,6 +1,5 @@
 package baggins.frodo.pomodoro.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,12 +8,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.Map;
 
 import baggins.frodo.pomodoro.R;
+import baggins.frodo.pomodoro.common.enums.BundleKey;
+import baggins.frodo.pomodoro.common.exceptions.PomOverException;
+import baggins.frodo.pomodoro.common.enums.PomState;
+import baggins.frodo.pomodoro.common.enums.ServiceTag;
 import baggins.frodo.pomodoro.logging.Logger;
 import baggins.frodo.pomodoro.model.Pomodoro;
 import baggins.frodo.pomodoro.services.AlarmResponseReceiver;
@@ -24,24 +28,7 @@ import baggins.frodo.pomodoro.services.AlarmService;
  * Created by Zach Sogolow on 5/24/2015.
  * TimerActivity started by clicking "Wanna pom?" from the MainActivity.
  */
-public class TimerActivity extends Activity {
-
-    public enum BundleKey {
-        ROUNDSLEFT("Rounds Left"),
-        CURRENTROUND("Current Round"),
-        POMSTATE("Pom State");
-
-        private String key;
-
-        BundleKey(String str) {
-            key = str;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-    }
+public class TimerActivity extends ActionBarActivity {
 
     Logger log = new Logger(this);
 
@@ -70,7 +57,7 @@ public class TimerActivity extends Activity {
     public void updateTimer() {
         try {
             countDownTimer = newTimer(pomodoro.getCurrentRoundLength());
-        } catch (Pomodoro.PomOverException poe) {
+        } catch (PomOverException poe) {
             poe.printStackTrace();
             countDownTimer.cancel();
         }
@@ -118,19 +105,19 @@ public class TimerActivity extends Activity {
         builder.setMessage(messageBuilder.toString())
                 .setTitle("Pomodoro");
 
-        if (pomodoro.getPrevPomState() != Pomodoro.PomState.LONGBREAK) {
+        if (pomodoro.getPrevPomState() != PomState.LONGBREAK) {
             builder.setPositiveButton("Go!", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     countDownTimer.start();
                     Intent startAlarmService = new Intent(getBaseContext(), AlarmService.class);
                     try {
-                        startAlarmService.putExtra(AlarmService.ServiceTag.TIME.toString(),
+                        startAlarmService.putExtra(ServiceTag.TIME.toString(),
                                                     pomodoro.getCurrentRoundLength());
-                        startAlarmService.setData(Uri.parse(AlarmService.ServiceTag.START.toString()));
-                    } catch (Pomodoro.PomOverException e) {
+                        startAlarmService.setData(Uri.parse(ServiceTag.START.toString()));
+                    } catch (PomOverException e) {
                         e.printStackTrace();
-                        startAlarmService.putExtra(AlarmService.ServiceTag.TIME.toString(), 0);
-                        startAlarmService.setData(Uri.parse(AlarmService.ServiceTag.OVER.toString()));
+                        startAlarmService.putExtra(ServiceTag.TIME.toString(), 0);
+                        startAlarmService.setData(Uri.parse(ServiceTag.OVER.toString()));
                     }
                     startService(startAlarmService);
                     updateTextViews();
@@ -163,10 +150,10 @@ public class TimerActivity extends Activity {
 
         pomodoro = new Pomodoro(this);
 
-//        if (savedInstanceState != null) {
-//            log.write("savedInstanceState != null");
-//            pomodoro.restoreState(savedInstanceState);
-//        }
+        if (savedInstanceState != null) {
+            log.write("savedInstanceState != null");
+            pomodoro.restoreState(savedInstanceState);
+        }
 
         updateTextViews();
 
@@ -194,8 +181,8 @@ public class TimerActivity extends Activity {
                 outState.putInt(key.getKey(), (Integer)obj);
             } else if (obj instanceof String) {
                 outState.putString(key.getKey(), (String) obj);
-            } else if (obj instanceof Pomodoro.PomState) {
-                outState.putString(key.getKey(), ((Pomodoro.PomState)obj).getPomString());
+            } else if (obj instanceof PomState) {
+                outState.putString(key.getKey(), ((PomState) obj).getPomString());
             } else {
                 // not implemented
             }
@@ -235,14 +222,14 @@ public class TimerActivity extends Activity {
      */
     public void onPingClicked(View view) {
         Intent alarmServiceIntent = new Intent(this, AlarmService.class);
-        alarmServiceIntent.putExtra(AlarmService.ServiceTag.TIME.toString(), 5000);
-        alarmServiceIntent.setData(Uri.parse(AlarmService.ServiceTag.START.toString()));
+        alarmServiceIntent.putExtra(ServiceTag.TIME.toString(), 5000);
+        alarmServiceIntent.setData(Uri.parse(ServiceTag.START.toString()));
         startService(alarmServiceIntent);
     }
 
     public void onStopClicked(View view) {
         Intent stopServiceIntent = new Intent(this, AlarmService.class);
-        stopServiceIntent.setData(Uri.parse(AlarmService.ServiceTag.STOP.toString()));
+        stopServiceIntent.setData(Uri.parse(ServiceTag.STOP.toString()));
         startService(stopServiceIntent);
 
     }
@@ -280,8 +267,8 @@ public class TimerActivity extends Activity {
     @Override
     public void onBackPressed() {
         log.write("onBackPressed");
-        Pomodoro.PomState state = pomodoro.getPomState();
-        if (state != Pomodoro.PomState.OVER || state != Pomodoro.PomState.NEW) {
+        PomState state = pomodoro.getPomState();
+        if (state != PomState.OVER || state != PomState.NEW) {
             AlertDialog.Builder builder = buildDialog("Do  you want to end the session?", "Pomodoro");
             builder.setPositiveButton("Yes, Leave.", new DialogInterface.OnClickListener() {
                 @Override
@@ -316,7 +303,7 @@ public class TimerActivity extends Activity {
         log.write("onDestroy");
         if (countDownTimer != null) countDownTimer.cancel();
         Intent stopServiceIntent = new Intent(this, AlarmService.class);
-        stopServiceIntent.setData(Uri.parse(AlarmService.ServiceTag.STOP.toString()));
+        stopServiceIntent.setData(Uri.parse(ServiceTag.STOP.toString()));
         startService(stopServiceIntent);
         super.onDestroy();
     }

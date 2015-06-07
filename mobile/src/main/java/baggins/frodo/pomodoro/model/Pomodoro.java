@@ -6,39 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import baggins.frodo.pomodoro.activities.TimerActivity;
+import baggins.frodo.pomodoro.common.enums.BundleKey;
+import baggins.frodo.pomodoro.common.exceptions.PomOverException;
+import baggins.frodo.pomodoro.common.enums.PomState;
 
 /**
  * Created by Zach Sogolow on 5/24/2015.
  */
 public class Pomodoro {
-
-    public enum PomState { NEW("New Pomodoro"),
-        WORK("Work"),
-        SHORTBREAK("Short Break"),
-        LONGBREAK("Long Break"),
-        OVER("Pom Over"),
-        UNKNOWN("Unknown");
-
-        private String pomString;
-
-        PomState(String str) {
-            pomString = str;
-        }
-
-        public String getPomString() {
-            return pomString;
-        }
-
-        public static PomState parse(String str) {
-            for (PomState p : values()) {
-                if (p.getPomString().equals(str)) {
-                    return p;
-                }
-            }
-            return UNKNOWN;
-        }
-
-    }
 
     public int sessionLength = 10000;
     public int shortBreakLength = 5000;
@@ -98,20 +73,20 @@ public class Pomodoro {
     }
 
     public void restoreState(Bundle savedInstanceState) {
-        int round = savedInstanceState.getInt(TimerActivity.BundleKey.CURRENTROUND.getKey());
-        int roundsLeft = savedInstanceState.getInt(TimerActivity.BundleKey.ROUNDSLEFT.getKey());
-        PomState state = PomState.parse(savedInstanceState.getString(TimerActivity.BundleKey.POMSTATE.getKey()));
+        int round = savedInstanceState.getInt(BundleKey.CURRENTROUND.getKey());
+        int roundsLeft = savedInstanceState.getInt(BundleKey.ROUNDSLEFT.getKey());
+        PomState state = PomState.parse(savedInstanceState.getString(BundleKey.POMSTATE.getKey()));
 
         currentRound = round;
         numberRounds = roundsLeft + round;
         pomState = state;
     }
 
-    public Map<TimerActivity.BundleKey, Object> getStateMap() {
-        Map<TimerActivity.BundleKey, Object> bundleKeyObjectMap = new HashMap<>();
-        bundleKeyObjectMap.put(TimerActivity.BundleKey.CURRENTROUND, currentRound);
-        bundleKeyObjectMap.put(TimerActivity.BundleKey.ROUNDSLEFT, numberRounds-currentRound);
-        bundleKeyObjectMap.put(TimerActivity.BundleKey.POMSTATE, pomState);
+    public Map<BundleKey, Object> getStateMap() {
+        Map<BundleKey, Object> bundleKeyObjectMap = new HashMap<>();
+        bundleKeyObjectMap.put(BundleKey.CURRENTROUND, currentRound);
+        bundleKeyObjectMap.put(BundleKey.ROUNDSLEFT, numberRounds-currentRound);
+        bundleKeyObjectMap.put(BundleKey.POMSTATE, pomState);
         return bundleKeyObjectMap;
     }
 
@@ -123,7 +98,7 @@ public class Pomodoro {
         return prevPomState;
     }
 
-    public int getCurrentRoundLength() throws PomOverException{
+    public int getCurrentRoundLength() throws PomOverException {
         switch (pomState) {
             case WORK:
                 return sessionLength;
@@ -135,12 +110,6 @@ public class Pomodoro {
                 throw new PomOverException();
             default:
                 return 0;
-        }
-    }
-
-    public class PomOverException extends Exception {
-         public PomOverException() {
-            super("The current pom state is OVER");
         }
     }
 }
