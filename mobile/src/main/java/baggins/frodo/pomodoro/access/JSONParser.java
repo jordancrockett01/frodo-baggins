@@ -96,8 +96,6 @@ public class JSONParser {
 //            postParams.add(new AbstractMap.SimpleEntry<String, String>("first_name", "first"));
 //            postParams.add(new AbstractMap.SimpleEntry<String, String>("last_name", "last"));
 //            postParams.add(new AbstractMap.SimpleEntry<String, String>("email", "email"));
-//            postParams.add(new AbstractMap.SimpleEntry<String, String>("phone", "phone"));
-
 
             BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(os, "UTF-8"));
