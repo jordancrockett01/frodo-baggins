@@ -12,6 +12,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Map;
+
 import baggins.frodo.pomodoro.R;
 import baggins.frodo.pomodoro.logging.Logger;
 import baggins.frodo.pomodoro.model.Pomodoro;
@@ -25,20 +27,18 @@ import baggins.frodo.pomodoro.services.AlarmService;
 public class TimerActivity extends Activity {
 
     public enum BundleKey {
-        NEW(""),
-        WORK(""),
-        SHORTBREAK(""),
-        LONGBREAK(""),
-        OVER("");
+        ROUNDSLEFT("Rounds Left"),
+        CURRENTROUND("Current Round"),
+        POMSTATE("Pom State");
 
-        private String pomString;
+        private String key;
 
         BundleKey(String str) {
-            pomString = str;
+            key = str;
         }
 
         public String getKey() {
-            return pomString;
+            return key;
         }
 
     }
@@ -162,9 +162,12 @@ public class TimerActivity extends Activity {
         gameStateView = (TextView) findViewById(R.id.gamestate);
 
         pomodoro = new Pomodoro(this);
-        if (savedInstanceState != null) {
-            pomodoro.restoreState(savedInstanceState);
-        }
+
+//        if (savedInstanceState != null) {
+//            log.write("savedInstanceState != null");
+//            pomodoro.restoreState(savedInstanceState);
+//        }
+
         updateTextViews();
 
 
@@ -182,7 +185,21 @@ public class TimerActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        log.write("onSaveInstanceState");
+        Map<BundleKey, Object> pomStateMap = pomodoro.getStateMap();
 
+        for (BundleKey key : pomStateMap.keySet()) {
+            Object obj = pomStateMap.get(key);
+            if (obj instanceof Integer) {
+                outState.putInt(key.getKey(), (Integer)obj);
+            } else if (obj instanceof String) {
+                outState.putString(key.getKey(), (String) obj);
+            } else if (obj instanceof Pomodoro.PomState) {
+                outState.putString(key.getKey(), ((Pomodoro.PomState)obj).getPomString());
+            } else {
+                // not implemented
+            }
+        }
         super.onSaveInstanceState(outState);
     }
 

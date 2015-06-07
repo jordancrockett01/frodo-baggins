@@ -2,6 +2,9 @@ package baggins.frodo.pomodoro.model;
 
 import android.os.Bundle;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import baggins.frodo.pomodoro.activities.TimerActivity;
 
 /**
@@ -13,7 +16,8 @@ public class Pomodoro {
         WORK("Work"),
         SHORTBREAK("Short Break"),
         LONGBREAK("Long Break"),
-        OVER("Pom Over");
+        OVER("Pom Over"),
+        UNKNOWN("Unknown");
 
         private String pomString;
 
@@ -23,6 +27,15 @@ public class Pomodoro {
 
         public String getPomString() {
             return pomString;
+        }
+
+        public static PomState parse(String str) {
+            for (PomState p : values()) {
+                if (p.getPomString().equals(str)) {
+                    return p;
+                }
+            }
+            return UNKNOWN;
         }
 
     }
@@ -85,7 +98,21 @@ public class Pomodoro {
     }
 
     public void restoreState(Bundle savedInstanceState) {
+        int round = savedInstanceState.getInt(TimerActivity.BundleKey.CURRENTROUND.getKey());
+        int roundsLeft = savedInstanceState.getInt(TimerActivity.BundleKey.ROUNDSLEFT.getKey());
+        PomState state = PomState.parse(savedInstanceState.getString(TimerActivity.BundleKey.POMSTATE.getKey()));
 
+        currentRound = round;
+        numberRounds = roundsLeft + round;
+        pomState = state;
+    }
+
+    public Map<TimerActivity.BundleKey, Object> getStateMap() {
+        Map<TimerActivity.BundleKey, Object> bundleKeyObjectMap = new HashMap<>();
+        bundleKeyObjectMap.put(TimerActivity.BundleKey.CURRENTROUND, currentRound);
+        bundleKeyObjectMap.put(TimerActivity.BundleKey.ROUNDSLEFT, numberRounds-currentRound);
+        bundleKeyObjectMap.put(TimerActivity.BundleKey.POMSTATE, pomState);
+        return bundleKeyObjectMap;
     }
 
     public PomState getPomState() {
