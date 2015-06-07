@@ -14,6 +14,7 @@ import baggins.frodo.pomodoro.model.Task;
 import baggins.frodo.pomodoro.model.User;
 
 /**
+ * DbAccess.java
  * Created by Zach Sogolow on 6/7/2015.
  */
 public class DBAccess {
@@ -174,6 +175,7 @@ public class DBAccess {
 
         @Override
         protected void onCancelled(Object o) {
+            log.write("onCancelled");
             super.onCancelled(o);
         }
     }
