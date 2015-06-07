@@ -20,7 +20,6 @@ public class DBAccess {
 
     Logger log = null;
     JSONParser jParser = new JSONParser();
-    private static String url = "http://COMMIT/PomWebApi/api/BLAH"; //TODO
 
     public DBAccess(Context context) {
         log = new Logger(context);
@@ -43,7 +42,7 @@ public class DBAccess {
     }
 
     public boolean createUser(User user) throws CreateUserException{
-        final String url = "http://10.0.0.248/PomWebApi/api/UserNames/PostUserName?";
+        final String url = "http://10.0.0.248/PomWebApi/api/UserNames/PostUserName";
 //        final String url = "http://localhost:4359/api/UserNames/PostUserName?";
 
         Object[] params = new Object[3];

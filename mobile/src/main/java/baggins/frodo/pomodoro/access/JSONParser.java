@@ -7,12 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -95,27 +93,27 @@ public class JSONParser {
         // Making HTTP request
         try {
             // defaultHttpClient
-            URL rUrl = new URL(url);
+            URL rUrl = new URL(url + getUserNameQuery(params));
             HttpURLConnection conn = (HttpURLConnection)rUrl.openConnection();
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);
             conn.setRequestMethod(WebRequest.POST.toString());
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            os = conn.getOutputStream();
-
-            List<AbstractMap.SimpleEntry<String, String>> postParams = new ArrayList<>();
-            postParams.add(new AbstractMap.SimpleEntry<>("name", params[0]));
-
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-
-            String stringParams = getQuery(postParams);
-            System.out.println(stringParams);
-            writer.write(stringParams);
-            writer.flush();
-            writer.close();
-            os.close();
+//            os = conn.getOutputStream();
+//
+//            List<AbstractMap.SimpleEntry<String, String>> postParams = new ArrayList<>();
+//            postParams.add(new AbstractMap.SimpleEntry<>("name", params[0]));
+//
+//            BufferedWriter writer = new BufferedWriter(
+//                    new OutputStreamWriter(os, "UTF-8"));
+//
+//            String stringParams = getQuery(postParams);
+//            System.out.println(stringParams);
+//            writer.write(stringParams);
+//            writer.flush();
+//            writer.close();
+//            os.close();
 
             conn.connect();
 
@@ -140,13 +138,19 @@ public class JSONParser {
 
     }
 
-    private String getQuery(List<AbstractMap.SimpleEntry<String, String>> params) throws UnsupportedEncodingException
+
+
+    private String getUserNameQuery(String[] objParams) throws UnsupportedEncodingException
     {
+        List<AbstractMap.SimpleEntry<String, String>> postParams = new ArrayList<>();
+        postParams.add(new AbstractMap.SimpleEntry<>("name", objParams[0]));
+
         StringBuilder result = new StringBuilder();
         boolean first = true;
 
         result.append("?");
-        for (AbstractMap.SimpleEntry<String,String> pair : params)
+
+        for (AbstractMap.SimpleEntry<String,String> pair : postParams)
         {
             if (first)
                 first = false;

@@ -82,10 +82,9 @@ public class MainActivity extends ActionBarActivity {
 
     public void onWebApiClicked(View view) {
         DBAccess dbAccess = new DBAccess(this);
-//        dbAccess.getAllUsers();
 
         try {
-            dbAccess.createUser(new User("Zach", "Sogolow", "zachsogolow"));
+            dbAccess.createUser(new User("Zach", "Sogolow", "zachsogolow99"));
 
         } catch (CreateUserException e) {
             e.printStackTrace();
