@@ -27,8 +27,7 @@ import baggins.frodo.pomodoro.common.enums.WebRequest;
  * Created by Zach Sogolow on 4/30/2015.
  */
 public class JSONParser {
-    static OutputStream os = null;
-    static InputStream is = null;
+
 //    static JSONArray jArray = null;
 //    static JSONObject jObj = null;
 
@@ -36,7 +35,7 @@ public class JSONParser {
     public JSONParser() {}
 
     public JSONArray getJSONFromUrl(String url) {
-
+        InputStream is = null;
         JSONArray jArray = null;
         String json = "";
 
@@ -80,8 +79,8 @@ public class JSONParser {
     }
 
     public JSONObject postJSONtoUrl(String url, String[] params) {
+        OutputStream os = null;
         JSONObject jObj = null;
-        String json = "";
 
         for (Object o : params) {
             System.out.println(o);
@@ -105,10 +104,25 @@ public class JSONParser {
             BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(os, "UTF-8"));
 
-            writer.write(getQuery(postParams));
+            String stringParams = getQuery(postParams);
+            System.out.println(stringParams);
+            writer.write(stringParams);
             writer.flush();
             writer.close();
             os.close();
+
+            conn.connect();
+
+            int repsonseCode = conn.getResponseCode();
+            String resposeMessage = conn.getResponseMessage();
+            String requestMethod = conn.getRequestMethod();
+            String connURL = conn.getURL().toString();
+            System.out.println(repsonseCode + "\n"
+                                + resposeMessage + "\n"
+                                + requestMethod + "\n"
+                                + connURL);
+
+            conn.disconnect();
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -125,6 +139,7 @@ public class JSONParser {
         StringBuilder result = new StringBuilder();
         boolean first = true;
 
+        result.append("?");
         for (AbstractMap.SimpleEntry<String,String> pair : params)
         {
             if (first)
