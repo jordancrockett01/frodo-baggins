@@ -1,4 +1,4 @@
-package baggins.frodo.pomodoro.access;
+package baggins.frodo.pomodoro.deprecated;
 
 import android.content.Context;
 import android.os.AsyncTask;

@@ -18,4 +18,5 @@ public class User {
     public String getUserName() { return userName; }
 
 
+    public String toString() { return userName; }
 }

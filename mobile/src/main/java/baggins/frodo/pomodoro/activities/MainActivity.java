@@ -10,9 +10,10 @@ import android.view.View;
 import android.widget.AnalogClock;
 import android.widget.TextClock;
 
+import java.util.List;
+
 import baggins.frodo.pomodoro.R;
-import baggins.frodo.pomodoro.access.DBAccess;
-import baggins.frodo.pomodoro.common.exceptions.CreateUserException;
+import baggins.frodo.pomodoro.access.user.UserDBAccess;
 import baggins.frodo.pomodoro.logging.Logger;
 import baggins.frodo.pomodoro.model.User;
 
@@ -81,13 +82,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onWebApiClicked(View view) {
-        DBAccess dbAccess = new DBAccess(this);
+        UserDBAccess userDBAccess = new UserDBAccess();
 
-        try {
-            dbAccess.createUser(new User("Zach", "Sogolow", "zachsogolow99"));
-
-        } catch (CreateUserException e) {
-            e.printStackTrace();
+        List<User> users = userDBAccess.getAll();
+        for (User u : users) {
+            log.write(u.toString());
         }
     }
 }
