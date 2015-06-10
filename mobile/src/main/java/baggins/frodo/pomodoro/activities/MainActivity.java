@@ -88,5 +88,7 @@ public class MainActivity extends ActionBarActivity {
         for (User u : users) {
             log.write(u.toString());
         }
+
+        User user = userDBAccess.get(1);
     }
 }

@@ -64,14 +64,24 @@ public class JSONParser {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
 
+
         // try parse the string to a JSON object
+        // ugly hack
         try {
             jArray = new JSONArray(json);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
+
+            try {
+                JSONObject obj = new JSONObject(json);
+                jArray = new JSONArray();
+                jArray.put(obj);
+            } catch (JSONException e2) {
+                Log.e("JSON Parser", "Error parsing data " + e.toString());
+            }
         }
 
-        // return JSON String
+        // return JSON array
         return jArray;
 
     }

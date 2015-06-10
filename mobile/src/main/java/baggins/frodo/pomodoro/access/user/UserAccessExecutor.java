@@ -33,4 +33,23 @@ public class UserAccessExecutor {
         }
         return new ArrayList<User>();
     }
+
+    public static User getUserById(String url, Object[] params) {
+        JSONParser jsonParser = new JSONParser();
+
+        JSONArray jsonArray = jsonParser.getJSONFromUrl(url + params[0]);
+
+        if (jsonArray==null) return null;
+
+        try {
+            System.out.println(jsonArray.length() + "");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                System.out.println(jsonArray.get(i).toString());
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

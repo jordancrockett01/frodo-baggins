@@ -61,6 +61,15 @@ public class UserGetAsync extends AsyncTask {
                     e.printStackTrace();
                 }
                 break;
+            case GetUserById:
+                try {
+                    String methodName = (String) params[AccessIndex.MethodString.getIndex()];
+                    Method method = UserAccessExecutor.class.getMethod(methodName, String.class, Object[].class);
+                    retObject = method.invoke(null, params[AccessIndex.Url.getIndex()], params[AccessIndex.AddtlParams.getIndex()]);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
 
         return retObject;

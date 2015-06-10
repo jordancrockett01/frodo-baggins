@@ -7,7 +7,8 @@ public enum AccessIndex {
 
     AccessMethod(0),
     MethodString(1),
-    Url(2);
+    Url(2),
+    AddtlParams(3);
 
     private int index;
     AccessIndex(int i) {

@@ -27,7 +27,7 @@ public class UserDBAccess implements IDBAccess<User> {
         List<User> users = null;
 
         AccessMethod am = AccessMethod.GetAllUsers;
-        AsyncTask userGetAsync = new UserGetAsync().execute(am.getExecutionParams(am));
+        AsyncTask userGetAsync = new UserGetAsync().execute(am.getExecutionParams(am, null));
 
        try {
            users = (List<User>) userGetAsync.get();
@@ -39,7 +39,17 @@ public class UserDBAccess implements IDBAccess<User> {
 
     @Override
     public User get(int id) {
-        return null;
+        User user = null;
+
+        AccessMethod am = AccessMethod.GetUserById;
+        AsyncTask userGetByIdAsync = new UserGetAsync().execute(am.getExecutionParams(am, new Object[] { id }));
+
+        try {
+            user = (User) userGetByIdAsync.get();
+        } catch (InterruptedException | ExecutionException ee) {
+            ee.printStackTrace();
+        }
+        return user;
     }
 
     @Override
