@@ -24,7 +24,7 @@ import baggins.frodo.pomodoro.model.User;
 public class MainActivity extends ActionBarActivity {
 
     @SuppressWarnings("unused")
-    Logger log = new Logger(this);
+    Logger log = new Logger(getClass());
 
     AnalogClock analog = null;
     TextClock textClock = null;
@@ -89,6 +89,7 @@ public class MainActivity extends ActionBarActivity {
             log.write(u.toString());
         }
 
-        User user = userDBAccess.get(1);
+        User user = userDBAccess.getUserById(1);
+        log.write(user.toString());
     }
 }

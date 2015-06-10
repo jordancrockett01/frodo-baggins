@@ -5,11 +5,13 @@ package baggins.frodo.pomodoro.model;
  */
 public class User {
 
+    private int id;
     private String firstName;
     private String lastName;
     private String userName;
 
-    public User(String first, String last, String user) {
+    public User(int id, String first, String last, String user) {
+        this.id = id;
         this.firstName = first;
         this.lastName = last;
         this.userName = user;
@@ -18,5 +20,5 @@ public class User {
     public String getUserName() { return userName; }
 
 
-    public String toString() { return userName; }
+    public String toString() { return "User : " + userName; }
 }

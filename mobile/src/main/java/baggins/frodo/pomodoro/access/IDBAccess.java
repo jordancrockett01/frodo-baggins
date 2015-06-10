@@ -7,7 +7,7 @@ import java.util.List;
  */
 public interface IDBAccess<K> {
     List<K> getAll();
-    K get(int id);
+    K getUserById(int id);
     boolean remove(K entity);
     boolean update(K entity);
 }

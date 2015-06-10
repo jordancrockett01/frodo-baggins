@@ -9,7 +9,7 @@ import baggins.frodo.pomodoro.logging.Logger;
  */
 public class UserPostAsync extends AsyncTask {
 
-    Logger log = new Logger(this);
+    Logger log = new Logger(getClass());
 
     public UserPostAsync(){}
 

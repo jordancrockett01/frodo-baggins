@@ -1,6 +1,5 @@
 package baggins.frodo.pomodoro.deprecated;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -19,11 +18,10 @@ import baggins.frodo.pomodoro.model.User;
  */
 public class DBAccess {
 
-    Logger log = null;
+    Logger log = new Logger(getClass());
     JSONParser jParser = new JSONParser();
 
-    public DBAccess(Context context) {
-        log = new Logger(context);
+    public DBAccess() {
     }
 
     // Create User                  POST

@@ -15,10 +15,9 @@ import baggins.frodo.pomodoro.model.User;
  */
 public class UserDBAccess implements IDBAccess<User> {
 
-    private Logger log = null;
+    private Logger log = new Logger(getClass());
 
     public UserDBAccess() {
-        log = new Logger(this);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class UserDBAccess implements IDBAccess<User> {
     }
 
     @Override
-    public User get(int id) {
+    public User getUserById(int id) {
         User user = null;
 
         AccessMethod am = AccessMethod.GetUserById;

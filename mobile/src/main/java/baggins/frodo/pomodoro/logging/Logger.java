@@ -9,8 +9,8 @@ import android.util.Log;
 public class Logger {
 
     public String TAG = "";
-    public Logger(Object context) {
-        TAG = context.getClass().getSimpleName();
+    public Logger(Class context) {
+        TAG = context.getName();
     }
 
     public void write(String d) {

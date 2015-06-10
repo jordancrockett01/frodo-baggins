@@ -17,11 +17,11 @@ public class Pomodoro {
 
     public int sessionLength = 10000;
     public int shortBreakLength = 5000;
-    public int longBreakLength = 20000;
+    public int longBreakLength = 15000;
 
     private PomState pomState = PomState.NEW;
     private PomState prevPomState = PomState.NEW;
-    public int numberRounds = 2;
+    public int numberRounds = 4;
     public int currentRound = 1;
     private TimerActivity timerActivity = null;
 

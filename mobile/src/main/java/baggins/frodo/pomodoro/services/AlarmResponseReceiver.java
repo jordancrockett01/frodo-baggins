@@ -24,7 +24,7 @@ public class AlarmResponseReceiver extends BroadcastReceiver {
         /*
          * Handle Intents here.
          */
-        Logger log = new Logger(context);
+        Logger log = new Logger(getClass());
         log.write(intent.getStringExtra(AlarmService.Constants.EXTENDED_DATA_STATUS));
         timerActivity.onBroadcastReceived(intent.getStringExtra(AlarmService.Constants.EXTENDED_DATA_STATUS));
     }

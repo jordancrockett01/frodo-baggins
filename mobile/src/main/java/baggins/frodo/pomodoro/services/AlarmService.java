@@ -18,7 +18,7 @@ import baggins.frodo.pomodoro.logging.Logger;
  */
 public class AlarmService extends Service {
 
-    Logger log = new Logger(this);
+    Logger log = new Logger(getClass());
 
     boolean running = false;
 

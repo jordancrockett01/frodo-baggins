@@ -30,7 +30,7 @@ import baggins.frodo.pomodoro.services.AlarmService;
  */
 public class TimerActivity extends Activity {
 
-    Logger log = new Logger(this);
+    Logger log = new Logger(getClass());
 
     TextView clock = null;
     TextView roundsLeftView = null;
